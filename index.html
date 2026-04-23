@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>一頁式閱讀報告工作台 - 小壁虎老師設計</title>
+    
+    <script>
+        /** * 👨‍🏫 教師自訂區：請在下方引號內填入您的 Google 表單繳交連結 
+         * 修改後儲存檔案，再將此檔案發送給學生使用。
+         */
+        const TEACHER_FORM_URL = "https://forms.gle/p1iWDPmiNWHtadKi7";
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
@@ -27,27 +35,17 @@
         }
 
         .instruction-card {
-            background: white; width: 650px; padding: 30px;
+            background: white; width: 600px; padding: 30px;
             border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            line-height: 1.6; max-height: 90vh; overflow-y: auto;
+            line-height: 1.6;
         }
         .instruction-card h2 { color: #2c3e50; text-align: center; border-bottom: 3px solid var(--green); padding-bottom: 10px; margin-bottom: 5px; }
         .instruction-card .author { text-align: center; color: #7f8c8d; font-size: 14px; margin-bottom: 20px; }
-        
-        /* 教師設定區樣式 */
-        .teacher-config {
-            background: #f1f3f4; padding: 15px; border-radius: 8px; margin-bottom: 20px;
-            border: 1px solid #dfe1e5;
-        }
-        .teacher-config label { display: block; font-weight: bold; font-size: 13px; color: #5f6368; margin-bottom: 5px; }
-        .teacher-config input { background: white; border: 1px solid #ccc; padding: 8px; border-radius: 4px; font-size: 13px; width: 95%; }
-
         .step-list { margin: 20px 0; }
-        .step-item { margin-bottom: 10px; font-size: 15px; display: flex; align-items: flex-start; }
-        .step-num { background: var(--green); color: #2e7d32; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; flex-shrink: 0; font-weight: bold; font-size: 13px; }
-        .step-item strong { color: #e67e22; }
-
-        .checkbox-area { text-align: center; margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+        .step-item { margin-bottom: 12px; font-size: 16px; display: flex; align-items: flex-start; }
+        .step-num { background: var(--green); color: #2e7d32; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; flex-shrink: 0; font-weight: bold; font-size: 14px; }
+        
+        .checkbox-area { text-align: center; margin-top: 25px; padding: 20px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee; }
         #start-btn { margin-top: 15px; padding: 12px 60px; font-size: 18px; font-weight: bold; border: none; border-radius: 30px; cursor: pointer; transition: 0.3s; }
         #start-btn:disabled { background-color: #bdc3c7; cursor: not-allowed; color: #7f8c8d; }
         #start-btn:not(:disabled) { background-color: #27ae60; color: white; box-shadow: 0 4px #219150; }
@@ -101,19 +99,12 @@
     <div class="instruction-card">
         <h2>一頁式閱讀報告</h2>
         <div class="author">小壁虎老師設計</div>
-
-        <div class="teacher-config">
-            <label>⚙️ 教師設定：請輸入您的 Google 繳交表單連結</label>
-            <input type="text" id="teacher-form-url" placeholder="貼上您的 Google 表單網址於此..." oninput="updateFormLink(this.value)">
-            <p style="font-size: 11px; color: #666; margin: 5px 0 0;">(若不輸入，將預設連往小壁虎老師的表單)</p>
-        </div>
-
         <div class="step-list">
-            <div class="step-item"><span class="step-num">1</span><div><strong>選任務：</strong> 點選一個諮詢個案，讀懂他的煩惱。</div></div>
+            <div class="step-item"><span class="step-num">1</span><div><strong>選任務：</strong> 點選諮詢個案，讀懂他的煩惱。</div></div>
             <div class="step-item"><span class="step-num">2</span><div><strong>找寶藏：</strong> 到電子書平台選「凌網」找答案。</div></div>
             <div class="step-item"><span class="step-num">3</span><div><strong>做筆記：</strong> 格子變綠色才合格（需滿10字）。</div></div>
             <div class="step-item"><span class="step-num">4</span><div><strong>存檔案：</strong> 沒寫完下載「進度檔」，下次可繼續。</div></div>
-            <div class="step-item"><span class="step-num">5</span><div><strong>交報告：</strong> 寫完下載 PDF 並到表單繳交。</div></div>
+            <div class="step-item"><span class="step-num">5</span><div><strong>交報告：</strong> 寫完下載 PDF 並繳交。</div></div>
         </div>
         <div class="checkbox-area">
             <input type="checkbox" id="read-confirm" onchange="toggleStartBtn()">
@@ -127,24 +118,18 @@
 <div class="paper" id="pdf-area">
     <div class="instruction-tag">
         ✨ 閱讀一本書的方法：<br>
-        1. 看書名想一想，針對這個書名問一個問題<br>
-        2. 從目錄挑選可以回答書名提問的章節<br>
+        1. 針對書名問一個問題<br>
+        2. 從目錄挑選可回答問題的章節<br>
         3. 先看章節的第一段和最後一段<br>
         4. 邊看邊做紀錄
     </div>
 
     <div class="top-header">
-        <div class="name-box">
-            <div class="pushpin"></div>
-            <input type="text" id="user_name" class="save-val" placeholder="班級姓名：">
-        </div>
+        <div class="name-box"><div class="pushpin"></div><input type="text" id="user_name" class="save-val" placeholder="班級姓名："></div>
     </div>
 
     <div class="header-container">
-        <div class="title-box">
-            <div class="pushpin"></div>
-            一頁式閱讀報告
-        </div>
+        <div class="title-box"><div class="pushpin"></div>一頁式閱讀報告</div>
         <div class="author-tag">📍 [小壁虎老師設計] (版權所有)</div>
     </div>
 
@@ -169,7 +154,6 @@
             <a href="https://ebook.moc.gov.tw/" target="_blank" class="platform-link">點我前往電子書平台</a>
             <span style="color: #e53935; font-weight: bold; font-size: 13px;">⚠️ 進站後點選：<u>凌網 HyRead ebook</u></span>
         </div>
-        
         <span class="step-title" style="text-align: left; border-bottom: 2px solid #eee; padding-bottom: 5px;">3. 查詢書目後寫下紀錄：</span>
     </div>
 
@@ -201,27 +185,22 @@
 
 <div class="btn-area">
     <div class="progress-box">
-        <button class="btn-work" style="background-color: #27ae60;" onclick="saveProgress()">💾 還沒寫完：下載進度檔</button>
-        <button class="btn-work" style="background-color: #2980b9;" onclick="document.getElementById('uploadFile').click()">📂 上傳上次未完成的檔案</button>
+        <button class="btn-work" style="background-color: #27ae60;" onclick="saveProgress()">💾 下載進度檔</button>
+        <button class="btn-work" style="background-color: #2980b9;" onclick="document.getElementById('uploadFile').click()">📂 匯入進度檔</button>
         <input type="file" id="uploadFile" style="display:none" accept=".json" onchange="loadProgress(this)">
     </div>
-    <button class="btn-finish" onclick="exportPDF()">✅ 我寫完了：下載 PDF 報告</button>
-    <a id="final-submit-link" href="https://forms.gle/p1iWDPmiNWHtadKi7" target="_blank" class="form-link-btn">🚀 步驟五：點我繳交報告給老師</a>
-    <button class="reset-btn" onclick="resetForm()">⚠️ 清空所有內容重新開始</button>
+    <button class="btn-finish" onclick="exportPDF()">✅ 下載 PDF 報告</button>
+    <a id="final-submit-link" href="#" target="_blank" class="form-link-btn">🚀 點我繳交報告給老師</a>
+    <button class="reset-btn" onclick="resetForm()">⚠️ 清空重新開始</button>
 </div>
 
 <script>
+    // 初始化連結
+    document.getElementById('final-submit-link').href = TEACHER_FORM_URL;
+
     function toggleStartBtn() { document.getElementById('start-btn').disabled = !document.getElementById('read-confirm').checked; }
     function closeOverlay() { document.getElementById('welcome-overlay').style.display = 'none'; }
     
-    // 更新繳交連結邏輯
-    function updateFormLink(url) {
-        const linkEl = document.getElementById('final-submit-link');
-        const finalUrl = url.trim() || "https://forms.gle/p1iWDPmiNWHtadKi7";
-        linkEl.href = finalUrl;
-        localStorage.setItem('customFormUrl', finalUrl);
-    }
-
     let currentMissionName = "";
     const missions = { 
         '減糖飲食': { story: "王老師體檢血糖偏高，請找：除了甜食，還有哪些具體的減糖技巧？", keys: ["減糖", "減重", "低GI"] },
@@ -232,13 +211,6 @@
     };
 
     window.onload = () => {
-        // 恢復老師設定的網址
-        const savedUrl = localStorage.getItem('customFormUrl');
-        if(savedUrl) {
-            document.getElementById('teacher-form-url').value = savedUrl;
-            document.getElementById('final-submit-link').href = savedUrl;
-        }
-
         document.querySelectorAll('.save-val').forEach(el => {
             const saved = localStorage.getItem(el.id);
             if (saved) { el.value = saved; if(el.tagName === 'TEXTAREA' && el.id.startsWith('g')) updateCharCount(el); }
@@ -308,7 +280,7 @@
             pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pageWidth, (canvas.height * pageWidth) / canvas.width);
             pdf.save(`${new Date().toISOString().slice(0,10).replace(/-/g,"")}_${currentMissionName}_${name}.pdf`);
             alert("PDF 下載成功！");
-        } catch (e) { alert("失敗"); } finally { document.getElementById('mission-ui').style.display = 'block'; btn.innerText = "✅ 我寫完了：下載 PDF 報告"; }
+        } catch (e) { alert("失敗"); } finally { document.getElementById('mission-ui').style.display = 'block'; btn.innerText = "✅ 下載 PDF 報告"; }
     }
 </script>
 </body>
