@@ -6,9 +6,7 @@
     <title>一頁式閱讀報告工作台 - 小壁虎老師設計</title>
     
     <script>
-        /** * 👨‍🏫 教師自訂區：請在下方引號內填入您的 Google 表單繳交連結 
-         * 修改此處後儲存檔案，再將檔案發送給學生即可。
-         */
+        /** * 👨‍🏫 教師自訂區：請在下方引號內填入您的 Google 表單繳交連結 */
         const TEACHER_FORM_URL = "https://forms.gle/p1iWDPmiNWHtadKi7";
     </script>
 
@@ -54,12 +52,12 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: #2c3e50; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .paper { width: 850px; background-color: white; padding: 30px 40px; position: relative; box-shadow: 10px 10px 0px rgba(0,0,0,0.2); border-radius: 5px; }
         
-        /* 核心修正：長文字自動換行樣式 */
+        /* 核心修正：強制文字換行並隱藏捲軸 */
         textarea { 
             width: 100%; border: none; background: transparent; resize: none; outline: none; 
             font-family: inherit; font-size: 14px; line-height: 1.5; 
             overflow-wrap: break-word; word-wrap: break-word; white-space: pre-wrap;
-            overflow-y: auto;
+            overflow-y: hidden; /* 匯出時關鍵：防止捲軸出現導致文字截斷 */
         }
 
         .instruction-tag { background-color: var(--yellow); padding: 12px; width: 250px; position: absolute; top: 20px; left: 20px; font-size: 12px; transform: rotate(-2deg); box-shadow: 2px 2px 5px rgba(0,0,0,0.1); line-height: 1.5; z-index: 10; }
@@ -70,7 +68,6 @@
         .author-tag { font-size: 14px; color: #666; font-weight: bold; background: #f1f1f1; padding: 4px 12px; border-radius: 12px; display: inline-block; margin-bottom: 15px; border: 1px solid #ccc; }
         .pushpin { width: 10px; height: 10px; background-color: var(--accent); border-radius: 50%; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); z-index: 5; box-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
 
-        /* 任務選擇區 */
         .mission-selector { margin-top: 80px; text-align: center; }
         .step-title { font-size: 18px; color: #2c3e50; font-weight: bold; margin: 15px 0 10px; display: block; }
         .mission-btn { padding: 8px 16px; margin: 4px; border-radius: 20px; border: 1px solid #ccc; background: white; cursor: pointer; font-size: 14px; transition: 0.2s; }
@@ -82,21 +79,22 @@
         .platform-box { background-color: #f0f4f8; padding: 12px; border-radius: 8px; margin: 10px 0 20px; display: flex; align-items: center; justify-content: center; gap: 15px; border: 1px solid #d1d9e0; }
         .platform-link { background-color: #2c3e50; color: white; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 13px; }
         
-        /* 填寫區塊排版 */
         .info-section { display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 15px; margin-bottom: 15px; }
         .input-box { background-color: var(--green); padding: 10px; position: relative; border-radius: 3px; }
         .report-main { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; }
         .nine-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; } 
-        .grid-cell { background-color: var(--green); height: 110px; padding: 8px; position: relative; border-radius: 3px; overflow: hidden; }
+        .grid-cell { background-color: var(--green); height: 110px; padding: 8px; position: relative; border-radius: 3px; overflow: hidden; display: flex; flex-direction: column; }
+        .grid-cell textarea { flex-grow: 1; }
         .side-column { display: flex; flex-direction: column; gap: 12px; }
-        .pink-box { background-color: var(--pink); height: 230px; padding: 15px; position: relative; overflow: hidden; }
-        .blue-box { background-color: var(--blue); height: 110px; padding: 15px; position: relative; overflow: hidden; }
+        .pink-box { background-color: var(--pink); height: 230px; padding: 15px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+        .pink-box textarea { flex-grow: 1; }
+        .blue-box { background-color: var(--blue); height: 110px; padding: 15px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+        .blue-box textarea { flex-grow: 1; }
         .yellow-box { background-color: var(--yellow); padding: 12px; position: relative; font-size: 12px; }
         
         .char-count { position: absolute; bottom: 3px; right: 8px; font-size: 9px; color: #777; }
         .warning-msg { color: #d32f2f; font-size: 9px; position: absolute; bottom: 3px; left: 8px; display: none; }
         
-        /* 按鈕區 */
         .btn-area { margin-top: 20px; width: 850px; display: flex; flex-direction: column; gap: 12px; }
         .progress-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #ecf0f1; padding: 15px; border-radius: 8px; border: 1px dashed #bdc3c7; }
         .btn-work { padding: 12px; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 15px; font-weight: bold; }
@@ -112,11 +110,11 @@
         <h2>一頁式閱讀報告</h2>
         <div class="author">小壁虎老師設計</div>
         <div class="step-list">
-            <div class="step-item"><span class="step-num">1</span><div><strong>選任務：</strong> 點選一個諮詢個案，讀懂他的煩惱。</div></div>
-            <div class="step-item"><span class="step-num">2</span><div><strong>找寶藏：</strong> 到電子書平台選「凌網」找答案。</div></div>
-            <div class="step-item"><span class="step-num">3</span><div><strong>做筆記：</strong> 格子變綠色才合格（需滿10字）。</div></div>
-            <div class="step-item"><span class="step-num">4</span><div><strong>存檔案：</strong> 沒寫完下載「進度檔」，下次可繼續。</div></div>
-            <div class="step-item"><span class="step-num">5</span><div><strong>交報告：</strong> 寫完下載 PDF 並到表單繳交。</div></div>
+            <div class="step-item"><span class="step-num">1</span><div><strong>選任務：</strong> 讀懂個案煩惱。</div></div>
+            <div class="step-item"><span class="step-num">2</span><div><strong>找寶藏：</strong> 電子書平台選「凌網」。</div></div>
+            <div class="step-item"><span class="step-num">3</span><div><strong>做筆記：</strong> 格子需滿10字。</div></div>
+            <div class="step-item"><span class="step-num">4</span><div><strong>存檔案：</strong> 下載「進度檔」可續寫。</div></div>
+            <div class="step-item"><span class="step-num">5</span><div><strong>交報告：</strong> 下載 PDF 繳交。</div></div>
         </div>
         <div class="checkbox-area">
             <input type="checkbox" id="read-confirm" onchange="toggleStartBtn()">
@@ -161,17 +159,17 @@
             </div>
         </div>
 
-        <span class="step-title">2. 前往電子書服務平台：</span>
+        <span class="step-title">2. 前往電子書平台：</span>
         <div class="platform-box">
-            <a href="https://ebook.moc.gov.tw/" target="_blank" class="platform-link">點我前往電子書平台</a>
-            <span style="color: #e53935; font-weight: bold; font-size: 13px;">⚠️ 進站後點選：<u>凌網 HyRead ebook</u></span>
+            <a href="https://ebook.moc.gov.tw/" target="_blank" class="platform-link">前往平台</a>
+            <span style="color: #e53935; font-weight: bold; font-size: 13px;">⚠️ 點選：<u>凌網 HyRead ebook</u></span>
         </div>
-        <span class="step-title" style="text-align: left; border-bottom: 2px solid #eee; padding-bottom: 5px;">3. 查詢書目後寫下紀錄：</span>
+        <span class="step-title" style="text-align: left; border-bottom: 2px solid #eee; padding-bottom: 5px;">3. 填寫紀錄：</span>
     </div>
 
     <div class="info-section" style="margin-top: 15px;">
         <div class="input-box"><div class="pushpin"></div><input type="text" id="book_title" class="save-val" placeholder="書名："></div>
-        <div class="input-box"><div class="pushpin"></div><textarea id="main_question" class="save-val" placeholder="這裡輸入你對書名提出的問題" rows="1"></textarea></div>
+        <div class="input-box"><div class="pushpin"></div><textarea id="main_question" class="save-val" placeholder="對書名提出的問題" rows="1"></textarea></div>
     </div>
 
     <div class="report-main">
@@ -183,13 +181,12 @@
             </script>
         </div>
         <div class="side-column">
-            <div class="pink-box"><div class="pushpin"></div><textarea id="final_sum" class="save-val" placeholder="將九個重點串成通順段落"></textarea></div>
+            <div class="pink-box"><div class="pushpin"></div><textarea id="final_sum" class="save-val" placeholder="九格重點串成段落"></textarea></div>
             <div class="blue-box"><div class="pushpin"></div><textarea id="final_act" class="save-val" placeholder="我的行動"></textarea></div>
             <div class="yellow-box">
                 <div class="pushpin"></div>
                 <strong>檢查表：</strong><br>
-                1.粉紅內容有回答問題嗎？<br>
-                2.有包含九格重點嗎？
+                1.有回答問題嗎？ 2.有九格重點嗎？
             </div>
         </div>
     </div>
@@ -203,11 +200,10 @@
     </div>
     <button class="btn-finish" onclick="exportPDF()">✅ 下載 PDF 報告</button>
     <a id="final-submit-link" href="#" target="_blank" class="form-link-btn">🚀 點我繳交報告給老師</a>
-    <button class="reset-btn" onclick="resetForm()">⚠️ 清空所有內容重新開始</button>
+    <button class="reset-btn" onclick="resetForm()">⚠️ 清空重新開始</button>
 </div>
 
 <script>
-    // 設定繳交連結
     document.getElementById('final-submit-link').href = TEACHER_FORM_URL;
 
     function toggleStartBtn() { document.getElementById('start-btn').disabled = !document.getElementById('read-confirm').checked; }
@@ -218,8 +214,8 @@
         '減糖飲食': { story: "王老師體檢血糖偏高，請找：除了甜食，還有哪些具體的減糖技巧？", keys: ["減糖", "減重", "低GI"] },
         '糖尿病': { story: "陳主任爸爸確診糖尿病，請找：日常生活中絕對不能吃的『地雷食物』？", keys: ["糖尿病飲食", "控糖", "血糖管理"] }, 
         '高血壓': { story: "校長常頭暈，醫生說高血壓。請找：有哪些運動可以幫助降低血壓？", keys: ["高血壓預防", "DASH飲食", "低鈉"] }, 
-        '憂鬱症陪伴': { story: "林老師的朋友最近心情很差，請找：陪伴憂鬱的朋友時，哪些話『千萬不能說』？", keys: ["憂鬱症", "心理諮商", "情緒管理"] }, 
-        '校園法律': { story: "小明下課受傷，對方說不用賠。請找：校園受驚與隱私權受損，法律怎麼說？", keys: ["校園法律", "生活法律", "法律扶助"] } 
+        '憂鬱症陪伴': { story: "朋友心情差，請找：陪伴憂鬱的朋友時，哪些話『千萬不能說』？", keys: ["憂鬱症", "心理諮商", "情緒管理"] }, 
+        '校園法律': { story: "小明下課受傷，請找：校園受驚與隱私權受損，法律怎麼說？", keys: ["校園法律", "生活法律", "法律扶助"] } 
     };
 
     window.onload = () => {
@@ -282,19 +278,31 @@
 
     function resetForm() { if(confirm("確定要清空嗎？資料將無法救回。")) { localStorage.clear(); location.reload(); } }
 
+    /** 🚀 修正文字截斷的核心函數 */
     async function exportPDF() {
         const btn = document.querySelector('.btn-finish'); 
         const name = document.getElementById('user_name').value.trim() || "學生";
-        btn.innerText = "產出中，請稍候..."; 
+        btn.innerText = "優化排版中，請稍候..."; 
         document.getElementById('mission-ui').style.display = 'none';
         
+        // 1. 取得所有輸入框，並紀錄原始高度
+        const textAreas = document.querySelectorAll('textarea');
+        const originalHeights = [];
+        
+        // 2. 暫時將格子撐開到文字完整長度
+        textAreas.forEach((ta, index) => {
+            originalHeights[index] = ta.style.height;
+            ta.style.height = 'auto';
+            ta.style.height = (ta.scrollHeight) + 'px'; 
+            ta.parentElement.style.height = 'auto'; // 同步調整容器
+            ta.parentElement.style.minHeight = (ta.scrollHeight + 20) + 'px';
+        });
+
         try {
-            // 修正：匯出時強制隱藏捲軸，確保長文字不被截斷
-            document.querySelectorAll('textarea').forEach(t => t.style.overflowY = 'hidden');
             const canvas = await html2canvas(document.getElementById('pdf-area'), { 
-                scale: 2,
-                logging: false,
-                useCORS: true
+                scale: 2, 
+                useCORS: true,
+                windowWidth: 850
             });
             const { jsPDF } = window.jspdf; 
             const pdf = new jsPDF('p', 'mm', 'a4');
@@ -302,10 +310,15 @@
             pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pageWidth, (canvas.height * pageWidth) / canvas.width);
             pdf.save(`${new Date().toISOString().slice(0,10).replace(/-/g,"")}_閱讀報告_${name}.pdf`);
         } catch (e) { 
-            alert("匯出 PDF 失敗，請再試一次。"); 
+            alert("匯出 PDF 失敗。"); 
         } finally { 
+            // 3. 恢復網頁原本的精美格線樣式
+            textAreas.forEach((ta, index) => {
+                ta.style.height = originalHeights[index];
+                ta.parentElement.style.height = ''; 
+                ta.parentElement.style.minHeight = '';
+            });
             document.getElementById('mission-ui').style.display = 'block'; 
-            document.querySelectorAll('textarea').forEach(t => t.style.overflowY = 'auto');
             btn.innerText = "✅ 下載 PDF 報告"; 
         }
     }
